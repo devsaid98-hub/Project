@@ -81,7 +81,15 @@ scene.add(dirLight);
 // ======================
 // TEST CUBE (ضروري للتأكد)
 // ======================
-
+// ======================
+// TEST CUBE (ضروري للتأكد)
+// ======================
+const cube = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshStandardMaterial({ color: 0x00ff00 })
+);
+scene.add(cube);
+  
 
 // ======================
 // Load GLB Model
