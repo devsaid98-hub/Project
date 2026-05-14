@@ -80,26 +80,6 @@ const cube = new THREE.Mesh(
 scene.add(cube);
 
 
-// ======================
-// Load GLB Model (اختياري)
-// ======================
-const loader = new GLTFLoader();
-
-loader.load(
-  './model.glb',
-  function (gltf) {
-    const model = gltf.scene;
-    model.scale.set(1, 1, 1);
-    scene.add(model);
-
-    console.log("Model loaded ✔");
-  },
-  undefined,
-  function (error) {
-    console.error("Model error:", error);
-  }
-);
-
 
 // ======================
 // Animation Loop
