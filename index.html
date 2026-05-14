@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3D Viewer</title>
+  <title>3D Viewer GitHub Ready</title>
 
   <style>
     body {
@@ -15,23 +15,33 @@
       display: block;
     }
   </style>
+
+  <!-- 🔥 Import Map (مهم جدًا لـ GitHub Pages) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 
 <body>
 
 <script type="module">
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+console.log("SCRIPT LOADED ✔");
 
 // ======================
 // Scene
 // ======================
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111);
-
 
 // ======================
 // Camera
@@ -44,21 +54,20 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1, 5);
 
-
 // ======================
 // Renderer
 // ======================
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
-
 
 // ======================
 // Controls
 // ======================
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-
 
 // ======================
 // Lights
@@ -69,9 +78,8 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 2);
 dirLight.position.set(5, 5, 5);
 scene.add(dirLight);
 
-
 // ======================
-// TEST CUBE (للتأكد أن كل شيء يعمل)
+// TEST CUBE (ضروري للتأكد)
 // ======================
 const cube = new THREE.Mesh(
   new THREE.BoxGeometry(1, 1, 1),
@@ -79,10 +87,27 @@ const cube = new THREE.Mesh(
 );
 scene.add(cube);
 
+// ======================
+// Load GLB Model
+// ======================
+const loader = new GLTFLoader();
 
+loader.load(
+  './model.glb',
+  function (gltf) {
+    console.log("MODEL LOADED ✔");
+
+    const model = gltf.scene;
+    scene.add(model);
+  },
+  undefined,
+  function (error) {
+    console.error("MODEL ERROR:", error);
+  }
+);
 
 // ======================
-// Animation Loop
+// Animate
 // ======================
 function animate() {
   requestAnimationFrame(animate);
@@ -94,7 +119,6 @@ function animate() {
 }
 
 animate();
-
 
 // ======================
 // Resize
