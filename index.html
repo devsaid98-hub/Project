@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3D Viewer with Loading</title>
+  <title>3D Viewer</title>
 
   <style>
     body {
@@ -78,8 +78,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-console.log("App started ✔");
-
 const loadingScreen = document.getElementById("loading-screen");
 
 // ================= SCENE =================
@@ -113,17 +111,10 @@ const light = new THREE.DirectionalLight(0xffffff, 2);
 light.position.set(5, 5, 5);
 scene.add(light);
 
-// ================= TEST CUBE =================
-const cube = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshStandardMaterial({ color: 0x00ff00 })
-);
-scene.add(cube);
-
 // ================= LOADER =================
 const loader = new GLTFLoader();
 
-// 🔥 Progress tracking
+// progress %
 loader.manager.onProgress = function (url, loaded, total) {
   const percent = ((loaded / total) * 100).toFixed(0);
   loadingScreen.querySelector(".loader-text").innerText =
@@ -155,8 +146,6 @@ loader.load(
 // ================= ANIMATE =================
 function animate() {
   requestAnimationFrame(animate);
-
-  cube.rotation.y += 0.01;
 
   controls.update();
   renderer.render(scene, camera);
