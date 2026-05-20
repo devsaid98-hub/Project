@@ -16,6 +16,57 @@
       overflow: hidden;
     }
   </style>
+
+  <!-- 🎮 Gesture Control -->
+  <script>
+    AFRAME.registerComponent('gesture-handler', {
+      init: function () {
+        let el = this.el;
+
+        let lastX = 0;
+        let isSingleTouch = false;
+
+        this.el.sceneEl.addEventListener('touchstart', function (event) {
+          if (event.touches.length === 1) {
+            isSingleTouch = true;
+            lastX = event.touches[0].pageX;
+          } else {
+            isSingleTouch = false;
+          }
+        });
+
+        this.el.sceneEl.addEventListener('touchmove', function (event) {
+
+          // 👆 تدوير بإصبع واحد
+          if (event.touches.length === 1 && isSingleTouch) {
+            let touch = event.touches[0];
+
+            let deltaX = touch.pageX - lastX;
+
+            el.object3D.rotation.y += deltaX * 0.01;
+
+            lastX = touch.pageX;
+          }
+
+          // ✌️ تكبير وتصغير بإصبعين
+          if (event.touches.length === 2) {
+            let t1 = event.touches[0];
+            let t2 = event.touches[1];
+
+            let distance = Math.hypot(
+              t1.pageX - t2.pageX,
+              t1.pageY - t2.pageY
+            );
+
+            let scale = distance * 0.005;
+
+            el.object3D.scale.set(scale, scale, scale);
+          }
+        });
+      }
+    });
+  </script>
+
 </head>
 
 <body>
@@ -29,15 +80,17 @@
   <!-- الكاميرا -->
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <!-- الهدف الأول -->
+  <!-- الهدف -->
   <a-entity mindar-image-target="targetIndex: 0">
 
+    <!-- المجسم -->
     <a-gltf-model
       src="model.glb"
       position="0 0 0"
       scale="0.5 0.5 0.5"
       rotation="0 0 0"
-    ></a-gltf-model>
+      gesture-handler>
+    </a-gltf-model>
 
   </a-entity>
 
